@@ -1,71 +1,33 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-
-local player = game.Players.LocalPlayer
-local mouse = player:GetMouse()
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
+-- Fly functionality (simple example to toggle fly mode)
 local flying = false
-local speed = 50
-local bodyVelocity, bodyGyro
+local user = game.Players.LocalPlayer
+local character = user.Character or user.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local bodyVelocity
 
--- Create the window and tab
-local Window = OrionLib:MakeWindow({Name = "PratikHub", HidePremium = false, IntroEnabled = true})
-local mainTab = Window:CreateTab("Main", 4475032848)
-
-local function startFlying()
-    -- Create BodyVelocity for flying
-    bodyVelocity = Instance.new("BodyVelocity")
-    bodyVelocity.MaxForce = Vector3.new(400000, 400000, 400000)
-    bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-    bodyVelocity.Parent = humanoidRootPart
-    
-    -- Create BodyGyro to keep the character upright
-    bodyGyro = Instance.new("BodyGyro")
-    bodyGyro.MaxTorque = Vector3.new(400000, 400000, 400000)
-    bodyGyro.CFrame = humanoidRootPart.CFrame
-    bodyGyro.Parent = humanoidRootPart
-
-    -- Flying loop
-    spawn(function()
-        while flying do
-            bodyVelocity.Velocity = (mouse.Hit.p - humanoidRootPart.Position).unit * speed
-            bodyGyro.CFrame = CFrame.new(humanoidRootPart.Position, mouse.Hit.p)
-            wait(0.1)
-        end
-    end)
-end
-
-local function stopFlying()
-    -- Stop flying and clear BodyVelocity and BodyGyro
-    if bodyVelocity then
-        bodyVelocity:Destroy()
-        bodyVelocity = nil
-    end
-    if bodyGyro then
-        bodyGyro:Destroy()
-        bodyGyro = nil
-    end
-end
-
+-- Function to toggle fly
 local function toggleFly()
     if flying then
-        -- Stop flying
+        -- Turn off fly
         flying = false
-        stopFlying()
+        print("Fly mode disabled.")
+        if bodyVelocity then
+            bodyVelocity:Destroy()  -- Remove body velocity when flying is off
+        end
     else
-        -- Start flying
+        -- Turn on fly
         flying = true
-        startFlying()
+        print("Fly mode enabled.")
+        
+        -- Create body velocity to move the character up
+        bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.MaxForce = Vector3.new(400000, 400000, 400000)  -- Force for fly
+        bodyVelocity.Velocity = Vector3.new(0, 50, 0)  -- Set velocity for flying up
+        bodyVelocity.Parent = character:WaitForChild("HumanoidRootPart")  -- Apply it to the character
+        
+        -- You can add more control to fly by modifying the `Velocity` and other parameters
     end
 end
 
--- Create a button to toggle flying
-mainTab:CreateButton({
-    Name = "Toggle Fly",  -- Button Name
-    Callback = function()
-        toggleFly()
-    end
-})
-
+-- Call toggleFly function when needed (in this case, it will be triggered from `main.lua`)
+toggleFly()
