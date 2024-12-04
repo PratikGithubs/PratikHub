@@ -1,88 +1,82 @@
--- main.lua script for PratikHub with Tabs
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
 
-local OrionLib = require(game:GetService("ReplicatedStorage"):WaitForChild("OrionLib"))
-
--- Create a Window
+-- Create the Window
 local Window = OrionLib:MakeWindow({
-    Name = "PratikHub",  -- Title of the window
+    Name = "PratikHub",
     HidePremium = false,
-    IntroText = "Welcome to PratikHub!",
     SaveConfig = true,
+    ConfigFolder = "PratikHub"
 })
 
--- Create Tabs in Order: Main, Player, Teleport, Misc, Settings
+-- Create Tabs in order: Main, Player, Teleport, Misc, Settings
 local MainTab = Window:MakeTab({
-    Name = "Main",  -- Tab title
-    Icon = "rbxassetid://123456789",  -- Optional icon (replace with an actual asset ID)
+    Name = "Main",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
 
 local PlayerTab = Window:MakeTab({
     Name = "Player",
-    Icon = "rbxassetid://112233445",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
 
 local TeleportTab = Window:MakeTab({
     Name = "Teleport",
-    Icon = "rbxassetid://998877665",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
 
 local MiscTab = Window:MakeTab({
     Name = "Misc",
-    Icon = "rbxassetid://987654321",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
 
 local SettingsTab = Window:MakeTab({
     Name = "Settings",
-    Icon = "rbxassetid://667788990",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
 
--- Main Tab Content
-MainTab:MakeButton({
+-- Main Tab content (add buttons or actions you want in the Main tab here)
+MainTab:AddButton({
     Name = "Main Button",
     Callback = function()
-        print("Main Button Clicked!")
-    end,
+        print("Main Button clicked")
+    end
 })
 
--- Player Tab Content
-PlayerTab:MakeButton({
-    Name = "List Players",
+-- Player Tab content
+PlayerTab:AddButton({
+    Name = "Player Button",
     Callback = function()
-        print("Listing all players...")
-        -- Add functionality to list players here
-    end,
+        print("Player Button clicked")
+    end
 })
 
--- Teleport Tab Content
-TeleportTab:MakeButton({
-    Name = "Teleport to Player",
+-- Teleport Tab content
+TeleportTab:AddButton({
+    Name = "Teleport Button",
     Callback = function()
-        print("Teleporting to player...")
-        -- Add teleportation code here (example: teleport to first player)
-        local targetPlayer = game.Players:GetPlayers()[1]
-        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(targetPlayer.Character.HumanoidRootPart.CFrame)
-        end
-    end,
+        print("Teleport Button clicked")
+    end
 })
 
--- Misc Tab Content
-MiscTab:MakeButton({
-    Name = "Enable Misc Feature",
+-- Misc Tab content
+MiscTab:AddButton({
+    Name = "Misc Button",
     Callback = function()
-        print("Misc Feature Enabled!")
-    end,
+        print("Misc Button clicked")
+    end
 })
 
--- Settings Tab Content
-SettingsTab:MakeToggle({
-    Name = "Enable Feature",
-    Default = false,
-    Callback = function(State)
-        if State then
-            print("Feature Enabled in Settings Tab!")
-        else
-            print("Feature Disabled in Settings Tab!")
-        end
-    end,
+-- Settings Tab content
+SettingsTab:AddButton({
+    Name = "Settings Button",
+    Callback = function()
+        print("Settings Button clicked")
+    end
 })
+
+OrionLib:Init()
