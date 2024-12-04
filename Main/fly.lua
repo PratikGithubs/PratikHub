@@ -1,33 +1,39 @@
--- Fly functionality (simple example to toggle fly mode)
-local flying = false
-local user = game.Players.LocalPlayer
-local character = user.Character or user.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-local bodyVelocity
+-- Load the Orion UI Library
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
 
--- Function to toggle fly
-local function toggleFly()
-    if flying then
-        -- Turn off fly
-        flying = false
-        print("Fly mode disabled.")
-        if bodyVelocity then
-            bodyVelocity:Destroy()  -- Remove body velocity when flying is off
-        end
-    else
-        -- Turn on fly
-        flying = true
-        print("Fly mode enabled.")
-        
-        -- Create body velocity to move the character up
-        bodyVelocity = Instance.new("BodyVelocity")
-        bodyVelocity.MaxForce = Vector3.new(400000, 400000, 400000)  -- Force for fly
-        bodyVelocity.Velocity = Vector3.new(0, 50, 0)  -- Set velocity for flying up
-        bodyVelocity.Parent = character:WaitForChild("HumanoidRootPart")  -- Apply it to the character
-        
-        -- You can add more control to fly by modifying the `Velocity` and other parameters
-    end
+-- Check if the library was loaded successfully
+if not OrionLib then
+    print("OrionLib failed to load!")
+    return
 end
+print("OrionLib loaded successfully!")
 
--- Call toggleFly function when needed (in this case, it will be triggered from `main.lua`)
-toggleFly()
+-- Create a window for the UI
+local Window = OrionLib:MakeWindow({Name = "My Script Hub", HidePremium = false})
+
+-- Check if the window was created successfully
+if not Window then
+    print("Failed to create UI window!")
+    return
+end
+print("UI window created!")
+
+-- Create tabs in the window
+local mainTab = Window:NewTab("Main")
+local flyTab = Window:NewTab("Fly")
+
+-- Create sections within the tabs
+local mainSection = mainTab:NewSection("Main Functions")
+local flySection = flyTab:NewSection("Fly Functions")
+
+-- Add a button to toggle fly (this will trigger the fly functionality from fly.lua)
+flySection:NewButton("Toggle Fly", "Toggles Fly mode", function()
+    -- Load the fly script from GitHub (you can change this URL if needed)
+    print("Loading fly script from GitHub...")
+    local flyScript = game:HttpGet("https://raw.githubusercontent.com/PratikGithubs/PratikHub/main/Main/fly.lua")
+    print("Fly script loaded. Executing...")
+    loadstring(flyScript)()
+end)
+
+print("Main script loaded successfully!")
+
